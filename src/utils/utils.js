@@ -8,7 +8,7 @@ export const createSquareMatrix = (n) => {
   for (let i = 0; i < n; i++) {
     matrix[i] = [];
     for (let k = 0; k < n; k++) {
-      const idx = getRandomNumber(0, values.length - 1);
+      const idx = getRandomNumber(0, values.length);
       matrix[i][k] = values[idx];
       values.splice(idx, 1);
     }
