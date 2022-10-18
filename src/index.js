@@ -2,7 +2,7 @@ import { createSquareMatrix, getTime } from './utils/utils';
 import { DEFAULT_FRAME_SIZE, FRAME_SIZES } from './constants/constants';
 
 // vars
-const moves = 0;
+let moves = 0;
 let time = 0;
 let frameSize = DEFAULT_FRAME_SIZE;
 
@@ -57,6 +57,7 @@ document.body.append(movesAndTimeBlock);
 
 function createBoard(mtx, size) {
   const board = document.createElement('div');
+  board.addEventListener('click', move);
   board.classList.add('board');
   document.body.append(board);
   for (let i = 0; i < mtx.length; i++) {
@@ -65,6 +66,7 @@ function createBoard(mtx, size) {
       cell.style.width = `${100 / size}%`;
       cell.style.height = `${100 / size}%`;
       cell.classList.add('cell');
+      cell.id = mtx[i][k];
       cell.textContent = mtx[i][k] !== 0 ? mtx[i][k] : '';
       board.append(cell);
     }
@@ -89,6 +91,36 @@ function createBoard(mtx, size) {
     link.id = s;
     otherSizesBlock.append(link);
   });
+
+  // moves implemetation
+  function move(eo) {
+    eo = eo || window.event;
+    const { id } = eo.target;
+    if (!+id) return;
+
+    for (let i = 0; i < mtx.length; i++) {
+      if (mtx[i].includes(+id)) {
+        for (let k = 0; k < mtx[i].length; k++) {
+          if (+mtx[i][k] === +id) {
+            if (+mtx[i]?.[k - 1] === 0) {
+              moves++;
+              movesInfo.textContent = `Moves: ${moves}`;
+            } else if (+mtx[i]?.[k + 1] === 0) {
+              moves++;
+              movesInfo.textContent = `Moves: ${moves}`;
+            } else if (+mtx[i - 1]?.[k] === 0) {
+              moves++;
+              movesInfo.textContent = `Moves: ${moves}`;
+            } else if (+mtx[i + 1]?.[k] === 0) {
+              moves++;
+              movesInfo.textContent = `Moves: ${moves}`;
+            }
+            break;
+          }
+        }
+      }
+    }
+  }
   document.body.append(otherSizesBlock);
 }
 
@@ -105,6 +137,7 @@ function createBoardHandler(size) {
   const newMatrix = createSquareMatrix(size);
   clearInterval(timer);
   time = 0;
+  moves = 0;
   timeInfo.textContent = 'Time: 00:00';
   createBoard(newMatrix, size);
   timer = setInterval(setTimer, 1000);
