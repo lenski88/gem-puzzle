@@ -15,3 +15,9 @@ export const createSquareMatrix = (n) => {
   }
   return matrix;
 };
+
+export const getTime = (seconds) => {
+  const mins = Math.floor(seconds / 60);
+  const sec = seconds - mins * 60;
+  return `${mins.toString().length === 1 ? `0${mins}` : mins}:${sec.toString().length === 1 ? `0${sec}` : sec}`;
+};

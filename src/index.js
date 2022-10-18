@@ -1,5 +1,10 @@
-import { createSquareMatrix } from './utils/utils';
+import { createSquareMatrix, getTime } from './utils/utils';
 import { DEFAULT_FRAME_SIZE, FRAME_SIZES } from './constants/constants';
+
+// vars
+const moves = 0;
+let time = 0;
+let frameSize = DEFAULT_FRAME_SIZE;
 
 // create controls
 const control = document.createElement('div');
@@ -26,10 +31,29 @@ resultsBtn.type = 'button';
 resultsBtn.value = 'Results';
 control.append(resultsBtn);
 
+// moves and time block
+const movesAndTimeBlock = document.createElement('div');
+movesAndTimeBlock.classList.add('moves-and-time');
+
+const movesInfo = document.createElement('p');
+movesInfo.textContent = `Moves: ${moves}`;
+movesAndTimeBlock.append(movesInfo);
+
+const timeInfo = document.createElement('p');
+timeInfo.textContent = 'Time: 00:00';
+
+function setTimer() {
+  time++;
+  timeInfo.textContent = `Time: ${getTime(time)}`;
+}
+
+let timer = setInterval(setTimer, 1000);
+
+movesAndTimeBlock.append(timeInfo);
+document.body.append(movesAndTimeBlock);
+
 // create board
 // add cells in board
-
-let frameSize = DEFAULT_FRAME_SIZE;
 
 function createBoard(mtx, size) {
   const board = document.createElement('div');
@@ -79,11 +103,18 @@ function createBoardHandler(size) {
   infoFrameSize.remove();
   board.remove();
   const newMatrix = createSquareMatrix(size);
+  clearInterval(timer);
+  time = 0;
+  timeInfo.textContent = 'Time: 00:00';
   createBoard(newMatrix, size);
+  timer = setInterval(setTimer, 1000);
 }
 
 // shuffle and start handler
 startBtn.addEventListener('click', () => createBoardHandler(frameSize));
+
+// stop timer
+stopBtn.addEventListener('click', () => clearInterval(timer));
 
 // change board size
 function changeBoardSize(eo) {
