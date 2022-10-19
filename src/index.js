@@ -143,6 +143,21 @@ function createBoard(mtx, size) {
         }
       }
     }
+
+    // check is player won
+    const cellsElements = document.querySelectorAll('.cell');
+    const cells = [...cellsElements].reduce((acc, item) => {
+      if (+item.id) acc.push(item.id);
+      return acc;
+    }, []);
+
+    const sortCells = [...cells].sort((a, b) => a - b);
+
+    if (cells.toString() === sortCells.toString()) {
+      console.log('congrats');
+    } else {
+      console.log('not yet');
+    }
   }
   document.body.append(otherSizesBlock);
 }
@@ -161,6 +176,7 @@ function createBoardHandler(size) {
   clearInterval(timer);
   time = 0;
   moves = 0;
+  movesInfo.textContent = `Moves: ${moves}`;
   timeInfo.textContent = 'Time: 00:00';
   createBoard(newMatrix, size);
   timer = setInterval(setTimer, 1000);
