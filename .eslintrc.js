@@ -17,5 +17,7 @@ module.exports = {
     'no-param-reassign': 'off',
     'no-use-before-define': ['error', { functions: false }],
     'no-unsafe-optional-chaining': 'off',
+    'no-restricted-syntax': 'off',
+    'no-labels': 'off',
   },
 };

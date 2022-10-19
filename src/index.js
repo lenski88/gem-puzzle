@@ -93,29 +93,52 @@ function createBoard(mtx, size) {
   });
 
   // moves implemetation
+
+  function changeCellPos(curr, next) {
+    moves++;
+    movesInfo.textContent = `Moves: ${moves}`;
+    const currentCell = document.getElementById(curr);
+    const nextCell = document.getElementById(next);
+
+    currentCell.textContent = '';
+    nextCell.textContent = curr;
+
+    currentCell.id = next;
+    nextCell.id = curr;
+  }
+
   function move(eo) {
     eo = eo || window.event;
     const { id } = eo.target;
     if (!+id) return;
 
+    // labels https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/label
+    outerLoop:
     for (let i = 0; i < mtx.length; i++) {
       if (mtx[i].includes(+id)) {
         for (let k = 0; k < mtx[i].length; k++) {
-          if (+mtx[i][k] === +id) {
-            if (+mtx[i]?.[k - 1] === 0) {
-              moves++;
-              movesInfo.textContent = `Moves: ${moves}`;
-            } else if (+mtx[i]?.[k + 1] === 0) {
-              moves++;
-              movesInfo.textContent = `Moves: ${moves}`;
-            } else if (+mtx[i - 1]?.[k] === 0) {
-              moves++;
-              movesInfo.textContent = `Moves: ${moves}`;
-            } else if (+mtx[i + 1]?.[k] === 0) {
-              moves++;
-              movesInfo.textContent = `Moves: ${moves}`;
+          if (mtx[i][k] === +id) {
+            if (mtx[i]?.[k - 1] === 0) {
+              changeCellPos(id, mtx[i]?.[k - 1]);
+              mtx[i][k] = 0;
+              mtx[i][k - 1] = +id;
+              break outerLoop;
+            } else if (mtx[i]?.[k + 1] === 0) {
+              changeCellPos(id, mtx[i]?.[k + 1]);
+              mtx[i][k] = 0;
+              mtx[i][k + 1] = +id;
+              break outerLoop;
+            } else if (mtx[i - 1]?.[k] === 0) {
+              changeCellPos(id, mtx[i - 1]?.[k]);
+              mtx[i][k] = 0;
+              mtx[i - 1][k] = +id;
+              break outerLoop;
+            } else if (mtx[i + 1]?.[k] === 0) {
+              changeCellPos(id, mtx[i + 1]?.[k]);
+              mtx[i][k] = 0;
+              mtx[i + 1][k] = +id;
+              break outerLoop;
             }
-            break;
           }
         }
       }
